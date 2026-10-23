@@ -1,5 +1,5 @@
 // PEGÁ AQUÍ TU URL DE GOOGLE APPS SCRIPT
-const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbzgNmmYyKpIq4Dib3UCsDzNFKldQrdR3Bx24FyUZWElZXY_g0WWhuz0diaPVochaZ5BWA/exec";
+const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbwxS-EZeHnK-82e0Kd1xdemqIIqHzSwmg-_dB72sqXh/dev";
 
 const form = document.getElementById('f');
 const btn = document.getElementById('btn');
