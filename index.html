@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Sorteo Canasta Escolar - Tecno Rivas</title>
+  
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+  <main class="container">
+    <div id="formWrap" class="card">
+      
+      <!-- Foto de la canasta escolar de Tecno Rivas -->
+      <div class="banner-wrapper">
+        <img src="banner.png" alt="Canasta Escolar Tecno Rivas" class="banner-img" onerror="this.src='https://tecnorivas.github.io/Sorteo-Tecno-Rivas/banner.png'">
+      </div>
+
+      <div class="card-header">
+        <h1>Registro de Factura</h1>
+        <p>Ingresá tus datos para validar el ticket y participar.</p>
+      </div>
+
+      <div class="card-body">
+        <form id="f">
+          <div class="field">
+            <label for="ced"><i class="fa-solid fa-id-card"></i> Número de Cédula</label>
+            <input id="ced" name="cedula" type="text" placeholder="Ej: 431-000000-0000A" required autocomplete="off">
+          </div>
+          
+          <div class="field">
+            <label for="tel"><i class="fa-solid fa-phone"></i> Número de Teléfono</label>
+            <input id="tel" name="telefono" type="tel" inputmode="tel" placeholder="Ej: 8888-8888" required autocomplete="off">
+          </div>
+          
+          <div class="field">
+            <label for="fac"><i class="fa-solid fa-receipt"></i> Número de Factura</label>
+            <input id="fac" name="factura" type="text" placeholder="Ej: FAC-00123" required autocomplete="off">
+          </div>
+          
+          <div class="field">
+            <label for="tot"><i class="fa-solid fa-money-bill-wave"></i> Total de la Factura (C$)</label>
+            <input id="tot" name="total" type="number" step="0.01" min="1500" placeholder="Ej: 1500.00" required autocomplete="off">
+            <small class="hint"><i class="fa-solid fa-circle-info"></i> Monto mínimo para participar: C$ 1,500.00</small>
+          </div>
+          
+          <button type="submit" id="btn">
+            <span>Validar y Guardar</span>
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+          
+          <div id="msg"></div>
+        </form>
+      </div>
+    </div>
+    
+    <!-- Pantalla de Éxito -->
+    <div class="card done" id="done">
+      <div class="done-badge">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      <h1>¡Registro Exitoso!</h1>
+      <p>Tu factura fue guardada correctamente. ¡Muchos éxitos en el sorteo de Tecno Rivas!</p>
+      <button onclick="location.reload()" class="btn-secondary">
+        <i class="fa-solid fa-rotate-right"></i> Registrar otra factura
+      </button>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
