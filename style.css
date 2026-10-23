@@ -1,0 +1,226 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: #001228;
+  background-image: 
+    radial-gradient(circle at 10% 10%, rgba(0, 82, 204, 0.35) 0%, transparent 40%),
+    radial-gradient(circle at 90% 90%, rgba(255, 204, 0, 0.15) 0%, transparent 40%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 12px;
+  color: #0f172a;
+}
+
+.container {
+  width: 100%;
+  max-width: 440px;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  border: 2px solid #0052cc;
+}
+
+/* Banner de la Canasta */
+.banner-wrapper {
+  width: 100%;
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 12px 0 12px;
+}
+
+.banner-img {
+  width: 100%;
+  max-height: 230px;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.card-header {
+  padding: 16px 20px 8px;
+  text-align: center;
+}
+
+.card-header h1 {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #002147;
+}
+
+.card-header p {
+  color: #475569;
+  font-size: 0.88rem;
+  margin-top: 2px;
+}
+
+.card-body {
+  padding: 16px 20px 24px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+label {
+  font-size: 0.83rem;
+  font-weight: 700;
+  color: #002147;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+label i {
+  color: #0052cc;
+}
+
+input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  background: #f8fafc;
+  border: 2px solid #cbd5e1;
+  border-radius: 10px;
+  color: #0f172a;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+input:focus {
+  border-color: #0052cc;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.15);
+}
+
+.hint {
+  font-size: 0.75rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Botón con el amarillo y azul de Tecno Rivas */
+button[type="submit"] {
+  margin-top: 8px;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #ffcc00, #f59e0b);
+  color: #002147;
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4);
+  transition: all 0.2s ease;
+}
+
+button[type="submit"]:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #fcd34d, #d97706);
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.5);
+}
+
+button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+#msg {
+  display: none;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.83rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+#msg.show {
+  display: block;
+}
+
+#msg.error {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.done {
+  display: none;
+  padding: 36px 20px;
+  text-align: center;
+}
+
+.done.show {
+  display: block;
+}
+
+.done-badge {
+  width: 80px;
+  height: 80px;
+  background: #fef3c7;
+  color: #d97706;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.6rem;
+  margin: 0 auto 16px;
+  box-shadow: 0 8px 18px rgba(217, 119, 6, 0.25);
+}
+
+.done h1 {
+  color: #002147;
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.done p {
+  color: #475569;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #0052cc;
+  background: #ffffff;
+  color: #0052cc;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: #f0f7ff;
+}
