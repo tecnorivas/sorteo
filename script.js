@@ -1,19 +1,13 @@
 // PEGÁ AQUÍ TU URL DE GOOGLE APPS SCRIPT
-const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbwxS-EZeHnK-82e0Kd1xdemqIIqHzSwmg-_dB72sqXh/dev";
+const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbySAkzSX3RqNQjldyex4GQLwkuR8p3jnh69TbKpAthzANGj_zyqSRArfXadcJ7gyTwY/exec";
 
 const form = document.getElementById('f');
 const btn = document.getElementById('btn');
 const msg = document.getElementById('msg');
 
-// Al cargar la página, intentamos sincronizar si hay facturas guardadas offline
-window.addEventListener('load', () => {
-  sincronizarPendientes();
-});
-
-// También escuchamos cuando el navegador recupera la conexión a internet
-window.addEventListener('online', () => {
-  sincronizarPendientes();
-});
+// Sincronizar pendientes al cargar o al recuperar internet
+window.addEventListener('load', () => sincronizarPendientes());
+window.addEventListener('online', () => sincronizarPendientes());
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -36,34 +30,24 @@ form.addEventListener('submit', async (e) => {
 
   const datosFactura = { cedula, telefono, factura, total };
 
-  // Verificamos si hay internet
   if (!navigator.onLine) {
-    // Si no hay internet, guardamos localmente en el cel/compu
     guardarLocalmente(datosFactura);
     mostrarExito();
     return;
   }
 
   try {
-    const params = new URLSearchParams();
-    params.append('cedula', cedula);
-    params.append('telefono', telefono);
-    params.append('factura', factura);
-    params.append('total', total);
+    // Construimos la URL con los parámetros GET (infalible para Google Sheets)
+    const urlFinal = `${ENDPOINT_URL}?cedula=${encodeURIComponent(cedula)}&telefono=${encodeURIComponent(telefono)}&factura=${encodeURIComponent(factura)}&total=${encodeURIComponent(total)}`;
 
-    await fetch(ENDPOINT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: params.toString()
+    await fetch(urlFinal, {
+      method: 'GET',
+      mode: 'no-cors'
     });
 
     mostrarExito();
 
   } catch (err) {
-    // Si falla el envío por red, lo salvamos localmente
     guardarLocalmente(datosFactura);
     mostrarExito();
   }
@@ -85,20 +69,13 @@ async function sincronizarPendientes() {
 
   for (let datos of pendientes) {
     try {
-      const params = new URLSearchParams();
-      params.append('cedula', datos.cedula);
-      params.append('telefono', datos.telefono);
-      params.append('factura', datos.factura);
-      params.append('total', datos.total);
-
-      await fetch(ENDPOINT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: params.toString()
+      const urlFinal = `${ENDPOINT_URL}?cedula=${encodeURIComponent(datos.cedula)}&telefono=${encodeURIComponent(datos.telefono)}&factura=${encodeURIComponent(datos.factura)}&total=${encodeURIComponent(datos.total)}`;
+      
+      await fetch(urlFinal, {
+        method: 'GET',
+        mode: 'no-cors'
       });
     } catch (e) {
-      // Si vuelve a fallar, lo mantenemos en la lista de espera
       nuevasPendientes.push(datos);
     }
   }
