@@ -20,68 +20,6 @@ body {
   color: #0f172a;
 }
 
-/* CAPA DE VIDEO OBLIGATORIA A PANTALLA COMPLETA */
-#introOverlay {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  background-color: #000000 !important;
-  z-index: 9999999 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  transition: opacity 0.5s ease;
-}
-
-#introOverlay.fade-out {
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-.video-container {
-  position: relative !important;
-  width: 100% !important;
-  max-width: 800px !important;
-  height: 100% !important;
-  max-height: 100vh !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  background: #000000 !important;
-}
-
-#introVideo {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: contain !important;
-}
-
-#skipBtn {
-  position: absolute !important;
-  bottom: 30px !important;
-  right: 20px !important;
-  background: rgba(0, 33, 71, 0.9) !important;
-  color: #ffcc00 !important;
-  border: 2px solid #ffcc00 !important;
-  padding: 10px 18px !important;
-  border-radius: 25px !important;
-  font-weight: 800 !important;
-  font-size: 0.85rem !important;
-  cursor: pointer !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  z-index: 10000000 !important;
-}
-
-#skipBtn:hover {
-  background: #ffcc00 !important;
-  color: #002147 !important;
-}
-
-/* CONTENEDOR PRINCIPAL */
 .container {
   width: 100%;
   max-width: 440px;
@@ -95,20 +33,33 @@ body {
   border: 2px solid #0052cc;
 }
 
-.banner-wrapper {
+/* CONTENEDOR MULTIMEDIA DENTRO DE LA TARJETA */
+.media-box {
   width: 100%;
-  background: #ffffff;
+  background: #000000;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 16px 16px 0 16px;
+  max-height: 220px;
+  overflow: hidden;
+}
+
+.intro-vid {
+  width: 100%;
+  max-height: 220px;
+  object-fit: contain;
 }
 
 .banner-img {
   width: 100%;
   max-height: 220px;
   object-fit: contain;
-  border-radius: 12px;
+  padding: 10px;
+  background: #ffffff;
+}
+
+.hidden {
+  display: none !important;
 }
 
 .card-header {
