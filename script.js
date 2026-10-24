@@ -1,11 +1,10 @@
-// PEGÁ AQUÍ TU URL DE GOOGLE APPS SCRIPT
+// PEGÁ AQUÍ TU NUEVO LINK DE GOOGLE APPS SCRIPT
 const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbz2k6S2yS0Gdib1aAXXXFJJMDRWY4r2Uyuk8xFv5OIge0mqGKVTSW4z5_QV8Y6wj9eT/exec";
 
 const form = document.getElementById('f');
 const btn = document.getElementById('btn');
 const msg = document.getElementById('msg');
 
-// Sincronizar pendientes al cargar o al recuperar internet
 window.addEventListener('load', () => sincronizarPendientes());
 window.addEventListener('online', () => sincronizarPendientes());
 
@@ -37,7 +36,6 @@ form.addEventListener('submit', async (e) => {
   }
 
   try {
-    // Construimos la URL con los parámetros GET (infalible para Google Sheets)
     const urlFinal = `${ENDPOINT_URL}?cedula=${encodeURIComponent(cedula)}&telefono=${encodeURIComponent(telefono)}&factura=${encodeURIComponent(factura)}&total=${encodeURIComponent(total)}`;
 
     await fetch(urlFinal, {
