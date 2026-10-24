@@ -11,7 +11,21 @@
 </head>
 <body>
 
-  <main class="container">
+  <!-- PANTALLA DE INTRO CON VIDEO -->
+  <div id="introContainer" class="intro-overlay">
+    <div class="video-wrapper">
+      <video id="introVideo" autoplay muted playsinline>
+        <source src="intro.mp4" type="video/mp4">
+        Tu navegador no soporta el formato de video.
+      </video>
+      <button id="skipBtn" class="btn-skip">
+        Saltar intro <i class="fa-solid fa-forward"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- CONTENIDO PRINCIPAL (Oculto al inicio) -->
+  <main class="container hidden" id="mainContent">
     <div id="formWrap" class="card">
       
       <!-- Foto de la canasta escolar de Tecno Rivas -->
