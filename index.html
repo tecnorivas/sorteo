@@ -11,10 +11,23 @@
 </head>
 <body>
 
+  <!-- PANTALLA DE INTRO CON VIDEO -->
+  <div id="introOverlay">
+    <div class="video-container">
+      <video id="introVideo" autoplay muted playsinline preload="auto">
+        <source src="intro.mp4" type="video/mp4">
+        Tu navegador no soporta el formato de video.
+      </video>
+      <button id="skipBtn" type="button">
+        Saltar intro <i class="fa-solid fa-forward"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- FORMULARIO PRINCIPAL -->
   <main class="container">
     <div id="formWrap" class="card">
       
-      <!-- Banner Institucional -->
       <div class="banner-wrapper">
         <img src="banner.png" alt="Canasta Escolar Tecno Rivas" class="banner-img" onerror="this.src='https://tecnorivas.github.io/Sorteo-Tecno-Rivas/banner.png'">
       </div>
