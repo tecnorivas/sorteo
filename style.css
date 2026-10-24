@@ -20,6 +20,88 @@ body {
   color: #0f172a;
 }
 
+/* OVERLAY DE INTRO BLINDADO */
+.intro-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000000;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.intro-overlay.oculto {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.intro-content {
+  position: relative;
+  width: 100%;
+  max-width: 650px;
+  height: 100%;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+#introVideo {
+  width: 100%;
+  max-height: 75vh;
+  object-fit: contain;
+  background: #000000;
+  border-radius: 12px;
+}
+
+.intro-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.btn-play, .btn-skip {
+  padding: 12px 22px;
+  border-radius: 30px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  border: 2px solid #ffcc00;
+}
+
+.btn-play {
+  background: #ffcc00;
+  color: #002147;
+}
+
+.btn-play:hover {
+  background: #fcd34d;
+  transform: translateY(-2px);
+}
+
+.btn-skip {
+  background: rgba(0, 33, 71, 0.8);
+  color: #ffcc00;
+}
+
+.btn-skip:hover {
+  background: #002147;
+  transform: translateY(-2px);
+}
+
+/* CONTENEDOR PRINCIPAL */
 .container {
   width: 100%;
   max-width: 440px;
@@ -33,33 +115,20 @@ body {
   border: 2px solid #0052cc;
 }
 
-/* CONTENEDOR MULTIMEDIA DENTRO DE LA TARJETA */
-.media-box {
+.banner-wrapper {
   width: 100%;
-  background: #000000;
+  background: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
-  max-height: 220px;
-  overflow: hidden;
-}
-
-.intro-vid {
-  width: 100%;
-  max-height: 220px;
-  object-fit: contain;
+  padding: 16px 16px 0 16px;
 }
 
 .banner-img {
   width: 100%;
   max-height: 220px;
   object-fit: contain;
-  padding: 10px;
-  background: #ffffff;
-}
-
-.hidden {
-  display: none !important;
+  border-radius: 12px;
 }
 
 .card-header {
