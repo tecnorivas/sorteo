@@ -1,47 +1,6 @@
 // PEGÁ AQUÍ TU URL DE GOOGLE APPS SCRIPT
 const ENDPOINT_URL = "PEGAR_AQUI_TU_LINK_DE_APPS_SCRIPT";
 
-// CONTROL ANTIBLOQUEO PARA EL VIDEO
-const introVideo = document.getElementById('introVideo');
-const bannerImg = document.getElementById('bannerImg');
-
-function mostrarBannerFallback() {
-  if (introVideo) introVideo.style.display = 'none';
-  if (bannerImg) bannerImg.classList.remove('hidden');
-}
-
-if (introVideo) {
-  let videoReproduciendose = false;
-
-  introVideo.addEventListener('playing', () => {
-    videoReproduciendose = true;
-  });
-
-  introVideo.addEventListener('error', () => {
-    mostrarBannerFallback();
-  });
-
-  introVideo.addEventListener('ended', () => {
-    mostrarBannerFallback();
-  });
-
-  // Intentamos reproducir el video
-  const playPromise = introVideo.play();
-  if (playPromise !== undefined) {
-    playPromise.catch(() => {
-      mostrarBannerFallback();
-    });
-  }
-
-  // RESPALDO INFALIBLE: Si en 1.2 segundos el video no ha arrancado (por códec o bloqueo), muestra el banner de inmediato
-  setTimeout(() => {
-    if (!videoReproduciendose && introVideo.paused) {
-      mostrarBannerFallback();
-    }
-  }, 1200);
-}
-
-// MANEJO DEL FORMULARIO Y ENVÍO A GOOGLE SHEETS
 const form = document.getElementById('f');
 const btn = document.getElementById('btn');
 const msg = document.getElementById('msg');
@@ -118,7 +77,7 @@ function enviarViaFormularioOculto(datos) {
     }, 1000);
 
   } catch (err) {
-    guardarLocalnested(datos);
+    guardarLocalmente(datos);
     mostrarExito();
   }
 }
