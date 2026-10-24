@@ -1,6 +1,36 @@
-// PEGÁ AQUÍ TU NUEVO LINK DE GOOGLE APPS SCRIPT
-const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbz2k6S2yS0Gdib1aAXXXFJJMDRWY4r2Uyuk8xFv5OIge0mqGKVTSW4z5_QV8Y6wj9eT/exec";
+// PEGÁ AQUÍ TU URL DE GOOGLE APPS SCRIPT
+const ENDPOINT_URL = "PEGAR_AQUI_TU_LINK_DE_APPS_SCRIPT";
 
+// MANEJO DE VIDEO DE INTRO
+const introContainer = document.getElementById('introContainer');
+const introVideo = document.getElementById('introVideo');
+const skipBtn = document.getElementById('skipBtn');
+const mainContent = document.getElementById('mainContent');
+
+function ocultarIntro() {
+  if (introContainer.classList.contains('fade-out')) return;
+  
+  introContainer.classList.add('fade-out');
+  setTimeout(() => {
+    introContainer.style.display = 'none';
+    mainContent.classList.remove('hidden');
+    if (introVideo) introVideo.pause();
+  }, 600);
+}
+
+if (introVideo) {
+  // Cuando termine el video, pasa automáticamente al formulario
+  introVideo.addEventListener('ended', ocultarIntro);
+  
+  // Por si el navegador bloquea la reproducción automática o falla el video
+  introVideo.addEventListener('error', ocultarIntro);
+}
+
+if (skipBtn) {
+  skipBtn.addEventListener('click', ocultarIntro);
+}
+
+// MANEJO DEL FORMULARIO Y SINCRONIZACIÓN
 const form = document.getElementById('f');
 const btn = document.getElementById('btn');
 const msg = document.getElementById('msg');
@@ -8,7 +38,7 @@ const msg = document.getElementById('msg');
 window.addEventListener('load', () => sincronizarPendientes());
 window.addEventListener('online', () => sincronizarPendientes());
 
-form.addEventListener('submit', async (e) => {
+form.addEventListener('submit', (e) => {
   e.preventDefault();
   msg.className = ''; 
   msg.textContent = '';
@@ -35,21 +65,46 @@ form.addEventListener('submit', async (e) => {
     return;
   }
 
+  enviarViaFormularioOculto(datosFactura);
+});
+
+function enviarViaFormularioOculto(datos) {
   try {
-    const urlFinal = `${ENDPOINT_URL}?cedula=${encodeURIComponent(cedula)}&telefono=${encodeURIComponent(telefono)}&factura=${encodeURIComponent(factura)}&total=${encodeURIComponent(total)}`;
+    let iframe = document.getElementById('hidden_iframe');
+    if (!iframe) {
+      iframe = document.createElement('iframe');
+      iframe.name = 'hidden_iframe';
+      iframe.id = 'hidden_iframe';
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+    }
 
-    await fetch(urlFinal, {
-      method: 'GET',
-      mode: 'no-cors'
-    });
+    const tempForm = document.createElement('form');
+    tempForm.method = 'POST';
+    tempForm.action = ENDPOINT_URL;
+    tempForm.target = 'hidden_iframe';
 
-    mostrarExito();
+    for (const key in datos) {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = datos[key];
+      tempForm.appendChild(input);
+    }
+
+    document.body.appendChild(tempForm);
+    tempForm.submit();
+
+    setTimeout(() => {
+      document.body.removeChild(tempForm);
+      mostrarExito();
+    }, 1000);
 
   } catch (err) {
-    guardarLocalmente(datosFactura);
+    guardarLocalmente(datos);
     mostrarExito();
   }
-});
+}
 
 function guardarLocalmente(datos) {
   let pendientes = JSON.parse(localStorage.getItem('facturas_pendientes')) || [];
@@ -57,28 +112,17 @@ function guardarLocalmente(datos) {
   localStorage.setItem('facturas_pendientes', JSON.stringify(pendientes));
 }
 
-async function sincronizarPendientes() {
+function sincronizarPendientes() {
   if (!navigator.onLine) return;
   
   let pendientes = JSON.parse(localStorage.getItem('facturas_pendientes')) || [];
   if (pendientes.length === 0) return;
 
-  let nuevasPendientes = [];
+  pendientes.forEach(datos => {
+    enviarViaFormularioOculto(datos);
+  });
 
-  for (let datos of pendientes) {
-    try {
-      const urlFinal = `${ENDPOINT_URL}?cedula=${encodeURIComponent(datos.cedula)}&telefono=${encodeURIComponent(datos.telefono)}&factura=${encodeURIComponent(datos.factura)}&total=${encodeURIComponent(datos.total)}`;
-      
-      await fetch(urlFinal, {
-        method: 'GET',
-        mode: 'no-cors'
-      });
-    } catch (e) {
-      nuevasPendientes.push(datos);
-    }
-  }
-
-  localStorage.setItem('facturas_pendientes', JSON.stringify(nuevasPendientes));
+  localStorage.removeItem('facturas_pendientes');
 }
 
 function mostrarExito() {
