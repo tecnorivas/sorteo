@@ -1,5 +1,5 @@
 // PEGÁ AQUÍ TU URL DE GOOGLE APPS SCRIPT
-const ENDPOINT_URL = "PEGAR_AQUI_TU_LINK_DE_APPS_SCRIPT";
+const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbz1f_GW3ti_V-rD72wac-HB_zKpjJCGR1nyqvQBt3Df1GjqCiHkTksjGHPv8BmcBmSc/exec";
 
 // MANEJO DE VIDEO DE INTRO
 const introContainer = document.getElementById('introContainer');
