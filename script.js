@@ -1,33 +1,42 @@
 // PEGÁ AQUÍ TU URL DE GOOGLE APPS SCRIPT
 const ENDPOINT_URL = "PEGAR_AQUI_TU_LINK_DE_APPS_SCRIPT";
 
-// CONTROL DE VIDEO / BANNER INTEGRADO
+// CONTROL DE VIDEO INTRO INTERACTIVO
+const introOverlay = document.getElementById('introOverlay');
 const introVideo = document.getElementById('introVideo');
-const bannerFallback = document.getElementById('bannerFallback');
+const playVideoBtn = document.getElementById('playVideoBtn');
+const skipVideoBtn = document.getElementById('skipVideoBtn');
 
-function mostrarBanner() {
-  if (introVideo) introVideo.style.display = 'none';
-  if (bannerFallback) bannerFallback.classList.remove('hidden');
+function ocultarIntro() {
+  if (introOverlay) {
+    introOverlay.classList.add('oculto');
+    if (introVideo) {
+      introVideo.pause();
+    }
+  }
 }
 
-if (introVideo) {
-  introVideo.addEventListener('ended', mostrarBanner);
-  introVideo.addEventListener('error', mostrarBanner);
+if (introVideo && introOverlay) {
+  // Intentar autoplay automático
+  introVideo.play().then(() => {
+    // Si reproduce solo, ocultamos el botón de play
+    if (playVideoBtn) playVideoBtn.style.display = 'none';
+  }).catch(() => {
+    // Si el navegador lo bloquea, mostramos el botón claramente para que el usuario le dé clic
+    if (playVideoBtn) playVideoBtn.style.display = 'flex';
+  });
 
-  // Intentar reproducir de forma segura
-  const playPromise = introVideo.play();
-  if (playPromise !== undefined) {
-    playPromise.catch(() => {
-      mostrarBanner();
-    });
-  }
+  playVideoBtn.addEventListener('click', () => {
+    introVideo.play();
+    playVideoBtn.style.display = 'none';
+  });
 
-  // Respaldo por si el navegador bloquea el video de inicio
-  setTimeout(() => {
-    if (introVideo.paused && bannerFallback.classList.contains('hidden')) {
-      mostrarBanner();
-    }
-  }, 1500);
+  introVideo.addEventListener('ended', ocultarIntro);
+  introVideo.addEventListener('error', ocultarIntro);
+}
+
+if (skipVideoBtn) {
+  skipVideoBtn.addEventListener('click', ocultarIntro);
 }
 
 // MANEJO DEL FORMULARIO Y ENVÍO A GOOGLE SHEETS
