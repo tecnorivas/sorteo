@@ -1,55 +1,32 @@
 // PEGÁ AQUÍ TU URL DE GOOGLE APPS SCRIPT
-const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbz1f_GW3ti_V-rD72wac-HB_zKpjJCGR1nyqvQBt3Df1GjqCiHkTksjGHPv8BmcBmSc/exec";
+const ENDPOINT_URL = "PEGAR_AQUI_TU_LINK_DE_APPS_SCRIPT";
 
-// MANEJO DE VIDEO DE INTRO SAFE-MODE
-const introContainer = document.getElementById('introContainer');
+// CONTROL INTELIGENTE DE VIDEO / BANNER
 const introVideo = document.getElementById('introVideo');
-const skipBtn = document.getElementById('skipBtn');
-const mainContent = document.getElementById('mainContent');
+const bannerImg = document.getElementById('bannerImg');
 
-function ocultarIntro() {
-  if (!introContainer || introContainer.classList.contains('fade-out')) return;
-  
-  introContainer.classList.add('fade-out');
-  setTimeout(() => {
-    introContainer.style.display = 'none';
-    if (mainContent) mainContent.classList.remove('hidden');
-    if (introVideo) {
-      try { introVideo.pause(); } catch(e) {}
-    }
-  }, 500);
+function mostrarBannerFallback() {
+  if (introVideo) introVideo.classList.add('hidden');
+  if (bannerImg) bannerImg.classList.remove('hidden');
 }
 
-// 1. Si le dan clic al botón de saltar
-if (skipBtn) {
-  skipBtn.addEventListener('click', ocultarIntro);
-}
-
-// 2. Si le dan clic a cualquier parte de la pantalla negra
-if (introContainer) {
-  introContainer.addEventListener('click', ocultarIntro);
-}
-
-// 3. Cuando finalice el video
 if (introVideo) {
-  introVideo.addEventListener('ended', ocultarIntro);
-  introVideo.addEventListener('error', ocultarIntro);
+  // Si hay error al cargar intro.mp4, ocultamos video y ponemos la imagen de la canasta
+  introVideo.addEventListener('error', mostrarBannerFallback);
   
-  // Intentar reproducir
+  // Al terminar el video, muestra la foto de la canasta
+  introVideo.addEventListener('ended', mostrarBannerFallback);
+  
   const playPromise = introVideo.play();
   if (playPromise !== undefined) {
     playPromise.catch(() => {
-      // Si el navegador bloquea el autoplay, esperamos un par de segundos y quitamos la intro
-      setTimeout(ocultarIntro, 2000);
+      // Si el navegador no permite autostart, mostramos el banner
+      mostrarBannerFallback();
     });
   }
 }
 
-// 4. TEMPORIZADOR DE RESPALDO: Si en 3 segundos no cargó video, muestra el formulario a huevo
-setTimeout(ocultarIntro, 3000);
-
-
-// MANEJO DEL FORMULARIO Y SINCRONIZACIÓN
+// MANEJO DEL FORMULARIO Y ENVÍO
 const form = document.getElementById('f');
 const btn = document.getElementById('btn');
 const msg = document.getElementById('msg');
