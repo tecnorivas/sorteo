@@ -1,34 +1,53 @@
 // PEGÁ AQUÍ TU URL DE GOOGLE APPS SCRIPT
 const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbz1f_GW3ti_V-rD72wac-HB_zKpjJCGR1nyqvQBt3Df1GjqCiHkTksjGHPv8BmcBmSc/exec";
 
-// MANEJO DE VIDEO DE INTRO
+// MANEJO DE VIDEO DE INTRO SAFE-MODE
 const introContainer = document.getElementById('introContainer');
 const introVideo = document.getElementById('introVideo');
 const skipBtn = document.getElementById('skipBtn');
 const mainContent = document.getElementById('mainContent');
 
 function ocultarIntro() {
-  if (introContainer.classList.contains('fade-out')) return;
+  if (!introContainer || introContainer.classList.contains('fade-out')) return;
   
   introContainer.classList.add('fade-out');
   setTimeout(() => {
     introContainer.style.display = 'none';
-    mainContent.classList.remove('hidden');
-    if (introVideo) introVideo.pause();
-  }, 600);
+    if (mainContent) mainContent.classList.remove('hidden');
+    if (introVideo) {
+      try { introVideo.pause(); } catch(e) {}
+    }
+  }, 500);
 }
 
-if (introVideo) {
-  // Cuando termine el video, pasa automáticamente al formulario
-  introVideo.addEventListener('ended', ocultarIntro);
-  
-  // Por si el navegador bloquea la reproducción automática o falla el video
-  introVideo.addEventListener('error', ocultarIntro);
-}
-
+// 1. Si le dan clic al botón de saltar
 if (skipBtn) {
   skipBtn.addEventListener('click', ocultarIntro);
 }
+
+// 2. Si le dan clic a cualquier parte de la pantalla negra
+if (introContainer) {
+  introContainer.addEventListener('click', ocultarIntro);
+}
+
+// 3. Cuando finalice el video
+if (introVideo) {
+  introVideo.addEventListener('ended', ocultarIntro);
+  introVideo.addEventListener('error', ocultarIntro);
+  
+  // Intentar reproducir
+  const playPromise = introVideo.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(() => {
+      // Si el navegador bloquea el autoplay, esperamos un par de segundos y quitamos la intro
+      setTimeout(ocultarIntro, 2000);
+    });
+  }
+}
+
+// 4. TEMPORIZADOR DE RESPALDO: Si en 3 segundos no cargó video, muestra el formulario a huevo
+setTimeout(ocultarIntro, 3000);
+
 
 // MANEJO DEL FORMULARIO Y SINCRONIZACIÓN
 const form = document.getElementById('f');
@@ -38,35 +57,41 @@ const msg = document.getElementById('msg');
 window.addEventListener('load', () => sincronizarPendientes());
 window.addEventListener('online', () => sincronizarPendientes());
 
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  msg.className = ''; 
-  msg.textContent = '';
+if (form) {
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (msg) {
+      msg.className = ''; 
+      msg.textContent = '';
+    }
 
-  const cedula = document.getElementById('ced').value.trim();
-  const telefono = document.getElementById('tel').value.trim();
-  const factura = document.getElementById('fac').value.trim();
-  const total = parseFloat(document.getElementById('tot').value.trim());
+    const cedula = document.getElementById('ced').value.trim();
+    const telefono = document.getElementById('tel').value.trim();
+    const factura = document.getElementById('fac').value.trim();
+    const total = parseFloat(document.getElementById('tot').value.trim());
 
-  if (isNaN(total) || total < 1500) {
-    msg.className = 'show error';
-    msg.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> El total debe ser de al menos C$ 1,500.00 para participar.';
-    return;
-  }
+    if (isNaN(total) || total < 1500) {
+      if (msg) {
+        msg.className = 'show error';
+        msg.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> El total debe ser de al menos C$ 1,500.00 para participar.';
+      }
+      return;
+    }
 
-  btn.disabled = true;
-  btn.innerHTML = '<span>Procesando...</span> <i class="fa-solid fa-spinner fa-spin"></i>';
+    btn.disabled = true;
+    btn.innerHTML = '<span>Procesando...</span> <i class="fa-solid fa-spinner fa-spin"></i>';
 
-  const datosFactura = { cedula, telefono, factura, total };
+    const datosFactura = { cedula, telefono, factura, total };
 
-  if (!navigator.onLine) {
-    guardarLocalmente(datosFactura);
-    mostrarExito();
-    return;
-  }
+    if (!navigator.onLine) {
+      guardarLocalmente(datosFactura);
+      mostrarExito();
+      return;
+    }
 
-  enviarViaFormularioOculto(datosFactura);
-});
+    enviarViaFormularioOculto(datosFactura);
+  });
+}
 
 function enviarViaFormularioOculto(datos) {
   try {
@@ -126,8 +151,11 @@ function sincronizarPendientes() {
 }
 
 function mostrarExito() {
-  document.getElementById('formWrap').style.display = 'none';
-  document.getElementById('done').classList.add('show');
+  const formWrap = document.getElementById('formWrap');
+  const done = document.getElementById('done');
+  
+  if (formWrap) formWrap.style.display = 'none';
+  if (done) done.classList.add('show');
   
   if (typeof confetti === 'function') {
     confetti({
