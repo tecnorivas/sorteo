@@ -33,35 +33,20 @@ body {
   border: 2px solid #0052cc;
 }
 
-/* Área multimedia (Video o Imagen) */
-.media-container {
+.banner-wrapper {
   width: 100%;
-  background: #000000;
+  background: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 180px;
-  max-height: 240px;
-  overflow: hidden;
-  position: relative;
-}
-
-.promo-video {
-  width: 100%;
-  max-height: 240px;
-  object-fit: contain;
+  padding: 16px 16px 0 16px;
 }
 
 .banner-img {
   width: 100%;
-  max-height: 240px;
+  max-height: 220px;
   object-fit: contain;
-  padding: 10px;
-  background: #ffffff;
-}
-
-.hidden {
-  display: none !important;
+  border-radius: 12px;
 }
 
 .card-header {
@@ -157,6 +142,7 @@ button[type="submit"] {
 button[type="submit"]:hover:not(:disabled) {
   transform: translateY(-2px);
   background: linear-gradient(135deg, #fcd34d, #d97706);
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.5);
 }
 
 button:disabled {
@@ -231,4 +217,8 @@ button:disabled {
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: #f0f7ff;
 }
