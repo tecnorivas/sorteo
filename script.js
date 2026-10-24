@@ -1,45 +1,6 @@
 // PEGÁ AQUÍ TU URL DE GOOGLE APPS SCRIPT
 const ENDPOINT_URL = "PEGAR_AQUI_TU_LINK_DE_APPS_SCRIPT";
 
-// CONTROL DE VIDEO INTRO INTERACTIVO
-const introOverlay = document.getElementById('introOverlay');
-const introVideo = document.getElementById('introVideo');
-const playVideoBtn = document.getElementById('playVideoBtn');
-const skipVideoBtn = document.getElementById('skipVideoBtn');
-
-function ocultarIntro() {
-  if (introOverlay) {
-    introOverlay.classList.add('oculto');
-    if (introVideo) {
-      introVideo.pause();
-    }
-  }
-}
-
-if (introVideo && introOverlay) {
-  // Intentar autoplay automático
-  introVideo.play().then(() => {
-    // Si reproduce solo, ocultamos el botón de play
-    if (playVideoBtn) playVideoBtn.style.display = 'none';
-  }).catch(() => {
-    // Si el navegador lo bloquea, mostramos el botón claramente para que el usuario le dé clic
-    if (playVideoBtn) playVideoBtn.style.display = 'flex';
-  });
-
-  playVideoBtn.addEventListener('click', () => {
-    introVideo.play();
-    playVideoBtn.style.display = 'none';
-  });
-
-  introVideo.addEventListener('ended', ocultarIntro);
-  introVideo.addEventListener('error', ocultarIntro);
-}
-
-if (skipVideoBtn) {
-  skipVideoBtn.addEventListener('click', ocultarIntro);
-}
-
-// MANEJO DEL FORMULARIO Y ENVÍO A GOOGLE SHEETS
 const form = document.getElementById('f');
 const btn = document.getElementById('btn');
 const msg = document.getElementById('msg');
