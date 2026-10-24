@@ -1,32 +1,47 @@
 // PEGÁ AQUÍ TU URL DE GOOGLE APPS SCRIPT
 const ENDPOINT_URL = "PEGAR_AQUI_TU_LINK_DE_APPS_SCRIPT";
 
-// CONTROL INTELIGENTE DE VIDEO / BANNER
+// CONTROL ANTIBLOQUEO PARA EL VIDEO
 const introVideo = document.getElementById('introVideo');
 const bannerImg = document.getElementById('bannerImg');
 
 function mostrarBannerFallback() {
-  if (introVideo) introVideo.classList.add('hidden');
+  if (introVideo) introVideo.style.display = 'none';
   if (bannerImg) bannerImg.classList.remove('hidden');
 }
 
 if (introVideo) {
-  // Si hay error al cargar intro.mp4, ocultamos video y ponemos la imagen de la canasta
-  introVideo.addEventListener('error', mostrarBannerFallback);
-  
-  // Al terminar el video, muestra la foto de la canasta
-  introVideo.addEventListener('ended', mostrarBannerFallback);
-  
+  let videoReproduciendose = false;
+
+  introVideo.addEventListener('playing', () => {
+    videoReproduciendose = true;
+  });
+
+  introVideo.addEventListener('error', () => {
+    mostrarBannerFallback();
+  });
+
+  introVideo.addEventListener('ended', () => {
+    mostrarBannerFallback();
+  });
+
+  // Intentamos reproducir el video
   const playPromise = introVideo.play();
   if (playPromise !== undefined) {
     playPromise.catch(() => {
-      // Si el navegador no permite autostart, mostramos el banner
       mostrarBannerFallback();
     });
   }
+
+  // RESPALDO INFALIBLE: Si en 1.2 segundos el video no ha arrancado (por códec o bloqueo), muestra el banner de inmediato
+  setTimeout(() => {
+    if (!videoReproduciendose && introVideo.paused) {
+      mostrarBannerFallback();
+    }
+  }, 1200);
 }
 
-// MANEJO DEL FORMULARIO Y ENVÍO
+// MANEJO DEL FORMULARIO Y ENVÍO A GOOGLE SHEETS
 const form = document.getElementById('f');
 const btn = document.getElementById('btn');
 const msg = document.getElementById('msg');
@@ -103,7 +118,7 @@ function enviarViaFormularioOculto(datos) {
     }, 1000);
 
   } catch (err) {
-    guardarLocalmente(datos);
+    guardarLocalnested(datos);
     mostrarExito();
   }
 }
