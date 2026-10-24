@@ -1,49 +1,36 @@
 // PEGÁ AQUÍ TU URL DE GOOGLE APPS SCRIPT
 const ENDPOINT_URL = "PEGAR_AQUI_TU_LINK_DE_APPS_SCRIPT";
 
-// LÓGICA DE REPRODUCCIÓN DEL VIDEO
-const introOverlay = document.getElementById('introOverlay');
+// CONTROL DE VIDEO / BANNER INTEGRADO
 const introVideo = document.getElementById('introVideo');
-const skipBtn = document.getElementById('skipBtn');
+const bannerFallback = document.getElementById('bannerFallback');
 
-function cerrarVideo() {
-  if (!introOverlay) return;
-  introOverlay.classList.add('fade-out');
-  setTimeout(() => {
-    introOverlay.style.display = 'none';
-  }, 500);
+function mostrarBanner() {
+  if (introVideo) introVideo.style.display = 'none';
+  if (bannerFallback) bannerFallback.classList.remove('hidden');
 }
 
 if (introVideo) {
-  // Asegurar que comience mudo para evitar bloqueos del navegador
-  introVideo.muted = true;
-  
-  // Forzar la reproducción
+  introVideo.addEventListener('ended', mostrarBanner);
+  introVideo.addEventListener('error', mostrarBanner);
+
+  // Intentar reproducir de forma segura
   const playPromise = introVideo.play();
   if (playPromise !== undefined) {
     playPromise.catch(() => {
-      // Si el navegador de todos modos bloquea el autoplay, permitimos que al primer clic empiece
-      document.body.addEventListener('click', () => {
-        introVideo.play().catch(() => {});
-      }, { once: true });
+      mostrarBanner();
     });
   }
 
-  // Al finalizar el video, cerrar intro
-  introVideo.addEventListener('ended', cerrarVideo);
-  
-  // Si da un error de carga del archivo mp4, cierra la capa para no bloquear al usuario
-  introVideo.addEventListener('error', cerrarVideo);
+  // Respaldo por si el navegador bloquea el video de inicio
+  setTimeout(() => {
+    if (introVideo.paused && bannerFallback.classList.contains('hidden')) {
+      mostrarBanner();
+    }
+  }, 1500);
 }
 
-if (skipBtn) {
-  skipBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    cerrarVideo();
-  });
-}
-
-// MANEJO DEL FORMULARIO Y ENVÍO A SHEETS
+// MANEJO DEL FORMULARIO Y ENVÍO A GOOGLE SHEETS
 const form = document.getElementById('f');
 const btn = document.getElementById('btn');
 const msg = document.getElementById('msg');
